@@ -13,7 +13,7 @@ export function TravelQuote({ selectedPlan }: { selectedPlan: string }) {
   return <form className="quote-form" onSubmit={(event) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget));
-    const result = quoteSchema.safeParse({ ...data, trip, service, plan: selectedPlan, returnDate: data.returnDate ?? "" });
+    const result = quoteSchema.safeParse({ ...data, trip, service, plan: selectedPlan, returnDate: data["returnDate"] ?? "" });
     if (!result.success) { setErrors(Object.fromEntries(result.error.issues.map((issue) => [String(issue.path[0]), issue.message]))); return; }
     setErrors({});
     const url = quotationUrl(result.data);
