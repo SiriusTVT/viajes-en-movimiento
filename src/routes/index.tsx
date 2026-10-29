@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Check, Compass, Globe2, Instagram,
 import { Button } from "@/components/ui/button";
 import { TravelQuote } from "@/components/travel-quote";
 import { money, plans, whatsappNumber } from "@/lib/travel";
+import wdLogo from "@/assets/wd-logo.png.asset.json";
 import madrid from "@/assets/madrid-hero.jpg";
 import poland from "@/assets/poland.jpg";
 import spain from "@/assets/spain.jpg";
@@ -25,7 +26,7 @@ const services = [
   { icon: Luggage, title: "Logística y traslados", description: "Conexiones, traslados y reservas coordinadas para que cada parte del camino fluya." },
 ];
 const wa = `https://wa.me/${whatsappNumber}`;
-function Brand({ footer = false }: { footer?: boolean }) { return <a href="#inicio" className={`brand ${footer ? "brand-footer" : ""}`} aria-label="W.D Travel inicio"><span className="brand-mark"><Plane /></span><span>W.D <em>Travel</em><small>VIAJES & ASESORÍA MIGRATORIA</small></span></a>; }
+function Brand({ footer = false }: { footer?: boolean }) { return <a href="#inicio" className={`brand ${footer ? "brand-footer" : ""}`} aria-label="W.D Travel inicio"><img src={wdLogo.url} alt="Logo W.D Travel" className="brand-logo" width={145} height={83} /><span className="brand-text"><em>Travel</em><small>VIAJES & ASESORÍA MIGRATORIA</small></span></a>; }
 function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
