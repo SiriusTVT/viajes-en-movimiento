@@ -186,15 +186,12 @@ function Index() {
               </Button>
             </div>
             <div className="hero-reassurance">
-              <ShieldCheck size={15} />
-              <span>Asesoría personalizada 24/7</span>
-              <Plane size={15} />
-              <span>Tiquetes y visados</span>
-              <MessageCircle size={15} />
-              <span>WhatsApp directo</span>
+               <span><ShieldCheck size={15} /> Asesoría personalizada 24/7</span>
+               <span><Plane size={15} /> Tiquetes y visados</span>
+               <span><MessageCircle size={15} /> WhatsApp directo</span>
             </div>
           </div>
-          <button
+           <Button variant="ghost" size="icon"
             className="scroll-cue"
             aria-label="Desplazarse para descubrir más"
             onClick={() => document.getElementById("planes")?.scrollIntoView({ behavior: "smooth" })}
@@ -202,7 +199,7 @@ function Index() {
             <span className="scroll-arrow" aria-hidden="true">
               ↓
             </span>
-          </button>
+           </Button>
         </div>
       </section>
 
