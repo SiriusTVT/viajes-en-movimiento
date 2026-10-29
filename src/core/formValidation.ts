@@ -40,6 +40,7 @@ export const isValidContactPhone = (value: string, countryCode: string) => {
 
 export const isValidLocation = (value: string) => {
   const [country, city, ...extra] = value.split(' - ');
+  if (!country || !city || extra.length > 0) return false;
   return extra.length === 0 && Boolean(
     COUNTRIES_AND_CITIES.find(item => item.country === country)?.cities.includes(city)
   );
