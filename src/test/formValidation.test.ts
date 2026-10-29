@@ -8,7 +8,7 @@ describe("location validation", () => {
     expect(isValidLocation("")).toBe(false);
   });
   it("accepts a listed city and rejects an unknown one", () => {
-    expect(isValidLocation("Colombia - Cali")).toBe(true);
+    expect(isValidLocation("Colombia - Cali (CLO)")).toBe(true);
     expect(isValidLocation("Colombia - Unknown")).toBe(false);
     expect(isValidLocation("Colombia - Cali - Extra")).toBe(false);
   });
