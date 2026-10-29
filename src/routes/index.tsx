@@ -1,145 +1,52 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import hero from "@/assets/hero.jpg";
-import d1 from "@/assets/d1.jpg";
-import d2 from "@/assets/d2.jpg";
-import d3 from "@/assets/d3.jpg";
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Compass, Globe2, Instagram, MapPin, Menu, MessageCircle, Plane, ShieldCheck, Sparkles, X, FileCheck2, Luggage } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TravelQuote } from "@/components/travel-quote";
+import { money, plans, whatsappNumber } from "@/lib/travel";
+import madrid from "@/assets/madrid-hero.jpg";
+import poland from "@/assets/poland.jpg";
+import spain from "@/assets/spain.jpg";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Rumbo — Agencia de viajes de autor" },
-      { name: "description", content: "Viajes diseñados a tu medida: islas, montañas y ciudades legendarias." },
-      { property: "og:title", content: "Rumbo — Agencia de viajes de autor" },
-      { property: "og:description", content: "Viajes diseñados a tu medida: islas, montañas y ciudades legendarias." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  head: () => ({ meta: [
+    { title: "W.D Travel — Viajes y asesoría migratoria en Cali" },
+    { name: "description", content: "Más que una agencia: tu aliado en cada paso del viaje. Descubre planes a Madrid, Polonia y España y cotiza por WhatsApp con W.D Travel." },
+    { property: "og:title", content: "W.D Travel — Tu próximo destino comienza aquí" },
+    { property: "og:description", content: "Viajes a medida y asesoría migratoria en Cali. Planes a España y Polonia con acompañamiento personalizado." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }), component: Index,
 });
-
-const destinos = [
-  { img: d1, name: "Santorini", country: "Grecia", price: "2.490" },
-  { img: d2, name: "Machu Picchu", country: "Perú", price: "1.890" },
-  { img: d3, name: "Kioto", country: "Japón", price: "3.290" },
+const images = [madrid, poland, spain];
+const services = [
+  { icon: Compass, title: "Vacaciones a tu medida", description: "Escapadas nacionales e internacionales con vuelos, alojamientos y experiencias pensadas para ti." },
+  { icon: ShieldCheck, title: "Asistencia y seguros", description: "Asistencia médica, protección y respaldo para disfrutar tu viaje con tranquilidad." },
+  { icon: FileCheck2, title: "Asesoría migratoria", description: "Orientación en visados, requisitos de entrada y gestión documental, paso a paso." },
+  { icon: Luggage, title: "Logística y traslados", description: "Conexiones, traslados y reservas coordinadas para que cada parte del camino fluya." },
 ];
-
-function useReveal() {
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("is-visible")),
-      { threshold: 0.15 },
-    );
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-}
-
+const wa = `https://wa.me/${whatsappNumber}`;
+function Brand({ footer = false }: { footer?: boolean }) { return <a href="#inicio" className={`brand ${footer ? "brand-footer" : ""}`} aria-label="W.D Travel inicio"><span className="brand-mark"><Plane /></span><span>W.D <em>Travel</em><small>VIAJES & ASESORÍA MIGRATORIA</small></span></a>; }
 function Index() {
-  useReveal();
-  const [y, setY] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
   useEffect(() => {
-    const f = () => setY(window.scrollY);
-    window.addEventListener("scroll", f, { passive: true });
-    return () => window.removeEventListener("scroll", f);
+    const scroll = () => setScrolled(window.scrollY > 35);
+    scroll(); window.addEventListener("scroll", scroll, { passive: true });
+    const io = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add("is-visible"); io.unobserve(entry.target); } }), { threshold: .08 });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    return () => { window.removeEventListener("scroll", scroll); io.disconnect(); };
   }, []);
-
-  return (
-    <main className="overflow-hidden">
-      <nav className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${y > 40 ? "glass py-3" : "py-6"}`}>
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-          <span className="font-display text-2xl text-hero-foreground">Rumbo<span className="text-primary">.</span></span>
-          <div className="hidden gap-8 text-sm text-hero-foreground/80 md:flex">
-            <a href="#destinos" className="link-underline">Destinos</a>
-            <a href="#experiencia" className="link-underline">Experiencia</a>
-            <a href="#contacto" className="link-underline">Contacto</a>
-          </div>
-          <a href="#contacto" className="btn-primary text-sm">Reservar</a>
-        </div>
-      </nav>
-
-      <section className="relative flex h-screen min-h-[640px] items-end">
-        <img src={hero} alt="Laguna tropical" width={1920} height={1088}
-          className="absolute inset-0 h-full w-full object-cover animate-kenburns"
-          style={{ transform: `translateY(${y * 0.3}px) scale(1.1)` }} />
-        <div className="absolute inset-0 bg-hero-overlay" />
-        <div className="blob left-[10%] top-[20%] bg-primary" />
-        <div className="blob right-[5%] top-[40%] bg-accent [animation-delay:-4s]" />
-        <div className="relative mx-auto w-full max-w-7xl px-6 pb-24">
-          <p className="animate-rise mb-4 text-sm uppercase tracking-[0.4em] text-primary">Viajes de autor desde 2009</p>
-          <h1 className="animate-rise font-display text-6xl leading-[0.95] text-hero-foreground [animation-delay:150ms] md:text-8xl lg:text-9xl">
-            El mundo,<br /><em className="text-gradient">a tu ritmo.</em>
-          </h1>
-          <div className="animate-rise mt-10 flex flex-wrap gap-4 [animation-delay:300ms]">
-            <a href="#destinos" className="btn-primary">Explorar destinos →</a>
-            <a href="#experiencia" className="btn-ghost">Cómo viajamos</a>
-          </div>
-        </div>
-        <div className="absolute bottom-8 left-1/2 h-12 w-6 -translate-x-1/2 rounded-full border-2 border-hero-foreground/50">
-          <span className="mx-auto mt-2 block h-2 w-1 animate-bounce rounded-full bg-hero-foreground" />
-        </div>
-      </section>
-
-      <div className="marquee bg-primary py-5 text-primary-foreground">
-        <div className="marquee-track font-display text-3xl">
-          {Array.from({ length: 2 }).flatMap((_, k) =>
-            ["Bali", "Islandia", "Marrakech", "Patagonia", "Tulum", "Maldivas", "Cartagena", "Lisboa"].map((c) => (
-              <span key={k + c} className="mx-8">{c} ✦</span>
-            )),
-          )}
-        </div>
-      </div>
-
-      <section id="destinos" className="mx-auto max-w-7xl px-6 py-32">
-        <div className="reveal mb-16 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="font-display text-5xl md:text-7xl">Destinos<br /><em className="text-primary">que inspiran</em></h2>
-          <p className="max-w-sm text-muted-foreground">Itinerarios cuidados al detalle, con guías locales y alojamientos únicos.</p>
-        </div>
-        <div className="grid gap-8 md:grid-cols-3">
-          {destinos.map((d, i) => (
-            <article key={d.name} className="reveal card-dest group" style={{ transitionDelay: `${i * 120}ms` }}>
-              <img src={d.img} alt={d.name} loading="lazy" width={768} height={1024}
-                className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110" />
-              <div className="absolute inset-0 bg-card-overlay" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-hero-foreground">
-                <p className="text-xs uppercase tracking-widest opacity-80">{d.country}</p>
-                <h3 className="font-display text-4xl">{d.name}</h3>
-                <div className="mt-3 flex items-center justify-between translate-y-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                  <span>desde <b>USD {d.price}</b></span>
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-primary-foreground">→</span>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="experiencia" className="bg-secondary py-32">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-4">
-          {[["15+", "años de experiencia"], ["80", "países visitados"], ["12k", "viajeros felices"], ["4.9", "valoración media"]].map(([n, l], i) => (
-            <div key={l} className="reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-              <p className="font-display text-7xl text-gradient">{n}</p>
-              <p className="mt-2 text-secondary-foreground/70">{l}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="contacto" className="relative mx-auto max-w-5xl px-6 py-32 text-center">
-        <div className="reveal">
-          <h2 className="font-display text-5xl md:text-7xl">¿A dónde<br /><em className="text-primary">vamos ahora?</em></h2>
-          <form className="mx-auto mt-12 flex max-w-xl flex-col gap-3 sm:flex-row" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" required placeholder="tu@correo.com"
-              className="flex-1 rounded-full border border-border bg-card px-6 py-4 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/20" />
-            <button className="btn-primary">Planear mi viaje</button>
-          </form>
-        </div>
-      </section>
-
-      <footer className="border-t border-border py-10 text-center text-sm text-muted-foreground">
-        © 2026 Rumbo Viajes · Hecho para soñadores
-      </footer>
-    </main>
-  );
+  function selectPlan(title: string) { setSelectedPlan(title); document.getElementById("cotizar")?.scrollIntoView({ behavior: "smooth" }); }
+  return <main>
+    <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}><div className="container nav-inner"><Brand /><nav className="desktop-nav" aria-label="Navegación principal"><a href="#planes">Destinos y planes</a><a href="#servicios">Servicios</a><a href="#nosotros">Nosotros</a></nav><div className="nav-actions"><Button asChild className="nav-quote"><a href="#cotizar">Cotiza tu viaje <ArrowUpRight /></a></Button><Button variant="ghost" size="icon" className="mobile-toggle" aria-label={menu ? "Cerrar menú" : "Abrir menú"} onClick={() => setMenu(!menu)}>{menu ? <X /> : <Menu />}</Button></div></div>{menu && <nav className="mobile-nav" aria-label="Navegación móvil">{[["#planes", "Destinos y planes"], ["#servicios", "Servicios"], ["#nosotros", "Nosotros"], ["#cotizar", "Cotiza tu viaje"]].map(([href, text]) => <a key={href} href={href} onClick={() => setMenu(false)}>{text}<ArrowUpRight size={16} /></a>)}</nav>}</header>
+    <section id="inicio" className="travel-hero"><img src={madrid} width={1920} height={1080} alt="Madrid, Gran Vía y el edificio Metrópolis al atardecer" className="hero-photo" fetchPriority="high" /><div className="hero-shade" /><div className="container hero-content"><div className="hero-eyebrow"><span /> EL MUNDO TE ESTÁ ESPERANDO</div><h1>W.D Travel<span>Tu próximo destino,<br /><em>una nueva historia.</em></span></h1><p>Más que una agencia: tu aliado en cada paso del viaje.<br className="desktop-break" /> Viajes a medida y asesoría migratoria, con respaldo real.</p><div className="hero-actions"><Button asChild className="cta"><a href="#planes">Encuentra tu próximo destino <ArrowUpRight /></a></Button><Button asChild variant="ghost" className="hero-secondary"><a href="#cotizar">Planeemos tu viaje <ArrowRight /></a></Button></div><div className="hero-reassurance"><ShieldCheck size={18} /> Acompañamiento en cada paso <span>·</span><MapPin size={17} /> Desde Cali, hacia el mundo</div></div><div className="container hero-bottom"><a href="#planes" className="discover"><ArrowDown size={18} /> SIGUE EXPLORANDO</a><div className="hero-location"><MapPin size={16} /><span>MADRID, ESPAÑA<small>El inicio de algo extraordinario</small></span><span className="hero-index">01 / 03</span></div></div></section>
+    <div className="trust-strip"><div className="container"><span><Globe2 /> Destinos sin límites</span><span><ShieldCheck /> Viaja con respaldo</span><span><MessageCircle /> Atención personalizada</span><span><Plane /> Experiencias a tu medida</span></div></div>
+    <section id="planes" className="section container"><div className="section-heading reveal"><div><p className="eyebrow"><span /> TU PRÓXIMA GRAN HISTORIA</p><h2>Un destino. <em>Mil posibilidades.</em></h2></div><p>Da el primer paso hacia ese viaje que imaginas.<br />Nosotros te acompañamos en el resto.</p></div><div className="plans-grid">{plans.map((plan, i) => <article className="plan-card reveal" key={plan.id}><div className="plan-image"><img src={images[i]} alt={plan.destination === "España" ? "Barcelona y el Parque Güell, España" : plan.destination === "Polonia" ? "Plaza principal de Cracovia, Polonia" : "Vista panorámica de Madrid, España"} loading="lazy" width={1024} height={1280} /><span className="plan-tag">{i === 0 && <Sparkles size={13} />}{plan.tag}</span><div className="destination"><span>{plan.country}</span><h3>{plan.destination}</h3></div><span className="destination-arrow"><ArrowUpRight /></span></div><div className="plan-body"><h4>{plan.title}</h4><p className="plan-label">{plan.label}</p><div className="plan-price"><span><small>Desde</small><strong>{money(plan.price)} <small>COP</small></strong></span><del>{money(plan.previousPrice)}</del></div><ul>{plan.includes.map((item) => <li key={item}><Check size={15} />{item}</li>)}</ul><Button variant="outline" className="plan-cta" onClick={() => selectPlan(plan.title)}>Cotizar este plan <ArrowUpRight /></Button></div></article>)}</div><p className="offer-note">Valores en pesos colombianos. Consulta disponibilidad y condiciones con un asesor.</p></section>
+    <section id="nosotros" className="about-section"><div className="container about-grid"><div className="about-image reveal"><img src={spain} alt="Arquitectura y mosaicos del Parque Güell en Barcelona" width={1024} height={1280} loading="lazy" /><div className="image-caption"><Compass /><span>No solo destinos.<br /><strong>Nuevos comienzos.</strong></span></div></div><div className="about-copy reveal"><p className="eyebrow"><span /> NUESTRA ESENCIA</p><h2>Más que una agencia.<br /><em>Tu aliado de viaje.</em></h2><p>Sabemos que detrás de cada viaje hay un sueño, un reencuentro o un nuevo comienzo. Por eso, en W.D Travel cuidamos mucho más que tu itinerario.</p><p>Desde una escapada hasta un proyecto de vida en otro país, te damos orientación clara y acompañamiento personalizado, antes, durante y después del viaje.</p><div className="about-benefits"><div><ShieldCheck /><span><strong>Respaldo real</strong><small>Un equipo a tu lado en cada paso.</small></span></div><div><Compass /><span><strong>Planes pensados para ti</strong><small>Tus objetivos, tu presupuesto, tu ritmo.</small></span></div></div><Button asChild variant="link" className="about-link"><a href={wa} target="_blank" rel="noopener noreferrer">Conoce a tu próximo aliado <ArrowUpRight /></a></Button></div></div></section>
+    <section id="servicios" className="section container"><div className="section-heading reveal"><div><p className="eyebrow"><span /> TÚ DISFRUTAS. NOSOTROS COORDINAMOS.</p><h2>Todo listo <em>para el camino.</em></h2></div><p>Más tranquilidad, menos trámites.<br />Un solo equipo para todo tu viaje.</p></div><div className="services-grid">{services.map(({ icon: Icon, title, description }, i) => <div className="service-item reveal" key={title}><div className="service-top"><Icon /><span>0{i + 1}</span></div><h3>{title}</h3><p>{description}</p></div>)}</div></section>
+    <section id="cotizar" className="quote-section"><div className="container quote-layout"><div className="quote-intro"><p className="eyebrow"><span /> AQUÍ COMIENZA TU VIAJE</p><h2>Lo imaginas.<br /><em>Lo planeamos.</em></h2><p>Cuéntanos a dónde quieres ir y recibe una opción pensada para ti.</p><div className="quote-contact"><MessageCircle /><div><small>HABLEMOS POR WHATSAPP</small><a href={wa} target="_blank" rel="noopener noreferrer">+57 333 268 8678 <ArrowUpRight size={16} /></a></div></div><div className="quote-location"><MapPin size={20} /><p>También te esperamos en Cali.<strong>Centro Comercial La Estación</strong>Torre B – Local BP-05</p></div></div><TravelQuote selectedPlan={selectedPlan} /></div></section>
+    <section id="contacto" className="community-section"><div className="container community-inner"><div><p className="eyebrow">INSPÍRATE. VIAJA. COMPARTE.</p><h2>El próximo capítulo <em>lo escribes tú.</em></h2></div><div className="social-links"><a href="https://www.instagram.com/w.d.travel3/" target="_blank" rel="noopener noreferrer"><Instagram size={18} /> Instagram <ArrowUpRight size={15} /></a><a href="https://www.tiktok.com/@wdtravel6" target="_blank" rel="noopener noreferrer">TikTok <ArrowUpRight size={15} /></a><a href="https://www.facebook.com/people/WDTravel/61574445834395/" target="_blank" rel="noopener noreferrer">Facebook <ArrowUpRight size={15} /></a></div></div></section>
+    <footer className="site-footer"><div className="container footer-main"><Brand footer /><p>Agencia de viajes y asesoría migratoria<br />Cali, Colombia · Hacia el mundo</p><a href={wa} target="_blank" rel="noopener noreferrer">Hablemos de tu próximo viaje <ArrowUpRight size={16} /></a></div><div className="container footer-bottom"><span>© 2026 W.D Travel. Todos los derechos reservados.</span><span>Más que una agencia, tu aliado.</span></div></footer><Button asChild size="icon" className="floating-whatsapp"><a href={wa} target="_blank" rel="noopener noreferrer" aria-label="Contactar W.D Travel por WhatsApp"><MessageCircle /></a></Button>
+  </main>;
 }
